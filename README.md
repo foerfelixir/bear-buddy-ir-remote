@@ -60,7 +60,7 @@ Pages:
 
 ## Attribution
 
-Bear-Buddy is an awesome hardware kit designed by **TomatoCube**. Thanks to TomatoCube for the hardware design and excellent tutorial:
+Special thanks to **TomatoCube** for the awesome *Bear-Buddy* hardware kit, the hardware design, and the comprehensive tutorial:
 
 [Box 10 — Bear-Buddy DIY Desk Companion](https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion)
 
