@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build, test, verify, and flash every Bear-Buddy IR remote firmware variant.">
+  <title>Build and flash · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reproducible artifacts</div>
+      <h1>Build, test, verify, flash</h1>
+      <p>The checked-in hashes were produced with xpack RISC-V GCC 15.2.0-1. A clean build regenerates every source-backed binary and runs both protocol tests.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>Prerequisites</h2>
+        <ul>
+          <li>A POSIX shell or Git Bash.</li>
+          <li>Node.js 20 or newer.</li>
+          <li>xpack <code>riscv-none-elf-gcc-15.2.0-1</code>.</li>
+          <li>GNU Make only if you want to use the per-variant Makefiles.</li>
+        </ul>
+        <p class="muted">The top-level scripts call GCC, objcopy, and size directly, so they also work where the available <code>make</code> is not GNU Make.</p>
+      </article>
+      <article class="card">
+        <h2>One-command build</h2>
+        <pre><code>TOOLCHAIN_DIR=/path/to/xpack-riscv-none-elf-gcc-15.2.0-1/bin \
+  sh scripts/build-all.sh</code></pre>
+        <p>Set <code>CROSS</code> to another prefix if needed. The default is <code>riscv-none-elf-</code>.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What the build checks</h2>
+      <div class="grid three">
+        <article class="card"><h3>Samsung frames</h3><p>Reconstructs all six 32-bit values from the C constants and compares them with published codes.</p></article>
+        <article class="card"><h3>IRC2 codec</h3><p>Runs the browser's own build/parse functions against the firmware layout, checksum, and rejection cases.</p></article>
+        <article class="card"><h3>Artifact hashes</h3><p>Verifies all ten committed <code>.bin</code>, <code>.hex</code>, and template files against <code>manifests/SHA256SUMS</code>.</p></article>
+      </div>
+      <p><a href="https://github.com/foerfelixir/bear-buddy-ir-remote/blob/main/manifests/SHA256SUMS">Open the SHA-256 manifest</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Build one variant</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Variant</th><th>Command</th><th>Main output</th></tr></thead>
+          <tbody>
+            <tr><td>NEC 200 ms</td><td><code>make -C variants/nec-repeat-200ms CROSS=riscv-none-elf-</code></td><td><code>build/ir_remote.bin</code></td></tr>
+            <tr><td>Samsung 110 ms</td><td><code>make -C variants/samsung-110ms CROSS=riscv-none-elf-</code></td><td><code>build/ir_remote_samsung.bin</code></td></tr>
+            <tr><td>Configurable IRC2</td><td><code>TOOLCHAIN_DIR=/path/to/bin sh variants/configurable-irc2/build.sh</code></td><td><code>build/ir_remote_template.bin</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">The NEC-only backup has no source and cannot be rebuilt.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="callout">
+        <h2>Flash at the correct address</h2>
+        <p>Every firmware <code>.bin</code> starts at <code>0x08000000</code>. The 2112-byte configurable template is a combined code/config image for the web programmer, not a normal source build.</p>
+      </div>
+      <ol>
+        <li>Remove the remote's battery before connecting WCH-LinkE.</li>
+        <li>Put the programmer in <strong>WCH-LinkRV / RISC-V</strong> mode.</li>
+        <li>Connect SWIO, GND, and the appropriate target supply. Do not press a button while the programmer is attaching unless the variant's link window is already open.</li>
+        <li>Flash the <code>.bin</code> at <code>0x08000000</code>, or load the <code>.hex</code> in WCH-LinkUtility.</li>
+        <li>For configurable or Samsung firmware, keep a remote button held during Detect/Program so the six-second SWIO window stays open.</li>
+      </ol>
+      <p><a href="troubleshooting.html#swio">SWIO and power-cycle recovery</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Web-flasher integration</h2>
+      <p>The configurable variant can copy its template into an existing WCH-WebLink asset directory without hardcoded paths:</p>
+      <pre><code>WEBFW=/path/to/WCH_WebLink/data/www/fw \
+  TOOLCHAIN_DIR=/path/to/xpack-riscv-none-elf-gcc-15.2.0-1/bin \
+  sh variants/configurable-irc2/build.sh</code></pre>
+      <p>The complete ESP32-C3 bridge and browser UI live in the separate private [Bear-Buddy web flasher repository](https://github.com/foerfelixir/bear-buddy-webflasher).</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · build and flash</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>

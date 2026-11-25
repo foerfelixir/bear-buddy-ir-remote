@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SWIO, power, IR output, and programming troubleshooting for the Bear-Buddy IR remote.">
+  <title>Troubleshooting · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Hardware-first checks</div>
+      <h1>Troubleshooting</h1>
+      <p>Most failures are supply voltage, button state, debugger mode, or a weak IR LED—not the protocol constants.</p>
+    </div>
+  </section>
+
+  <section class="section" id="swio">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>Chip not detected</h2>
+        <ol>
+          <li>Confirm 3.3 V at VDD and common ground.</li>
+          <li>Put WCH-LinkE in <strong>WCH-LinkRV / RISC-V</strong> mode.</li>
+          <li>Connect SWIO (PD1) and SWCLK (PD3).</li>
+          <li>For configurable or Samsung builds, hold any button immediately before Detect/Program.</li>
+          <li>Power-cycle if a prior SWIO session left the MCU awake.</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h2>Link drops during programming</h2>
+        <ul>
+          <li>Keep a button held; SWIO movement extends the six-second window.</li>
+          <li>Use a fresh cell or regulated 3.3 V supply.</li>
+          <li>Shorten debugger leads and keep SWCLK/SWIO away from the IR LED wiring.</li>
+          <li>Do not load code while the battery booster is sagging.</li>
+        </ul>
+        <p class="muted">NEC 200 ms offers only a three-second startup window and no post-release window.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>Firmware runs, no IR output</h2>
+        <ol>
+          <li>Check button inputs: pressing should pull the pin to ground.</li>
+          <li>Check PA2 with a scope or an IR receiver. Confirm the output is active-low.</li>
+          <li>Inspect the NPN transistor, 1 kΩ base resistor, 47 Ω LED resistor, and LED polarity.</li>
+          <li>Try a phone camera to confirm carrier activity.</li>
+          <li>Confirm you flashed the intended variant at <code>0x08000000</code>.</li>
+        </ol>
+      </article>
+      <article class="card">
+        <h2>Samsung device ignores a key</h2>
+        <ul>
+          <li>Different Samsung generations use different protocol families. This build emits Samsung32.</li>
+          <li>For Power/Enter, the first full frame should work even before repeats.</li>
+          <li>For SW3, wait for the full 7 → 1 → 5 → 0 → Enter sequence.</li>
+          <li>Verify the target expects Samsung address 7.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Wrong configurable behavior</h2>
+        <ul>
+          <li>Blank or corrupt IRC2 pages deliberately fall back to factory NEC commands.</li>
+          <li>Program the full 2112-byte template before patching config.</li>
+          <li>Magic must be <code>IRC2</code>; protocol values are 0 or 1.</li>
+          <li>The checksum covers only bytes <code>0x00..0x0F</code>.</li>
+        </ul>
+        <p><a href="protocols.html#config">Configuration layout</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="callout info">
+        <h2>Do not confuse a working IR build with an unreachable SWIO link</h2>
+        <p>A pressed button wakes the firmware and keeps the link window open. Release it only after Detect/Program completes. If the chip vanishes afterward, power-cycle and reconnect before retrying.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · troubleshooting</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>

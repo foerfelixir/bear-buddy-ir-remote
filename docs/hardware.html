@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Physically traced hardware notes for the Bear-Buddy CH32V003 IR remote.">
+  <title>Hardware · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Reverse engineering</div>
+      <h1>Traced from the physical board</h1>
+      <p>These notes accompany a schematic reverse-engineered by physically tracing the PCB lines. It was not supplied by the manufacturer.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="callout warning">
+        <h2>Verify before using</h2>
+        <p>The traced schematic is an evidence-backed reconstruction, not an authoritative manufacturing drawing. Check continuity, supply voltage, polarity, and every net on your own board before powering or fabricating hardware.</p>
+      </div>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/foerfelixir/bear-buddy-hardware-notes/blob/main/hardware/IR_Remote_PCB_Traced_Schematic.pdf">Open traced schematic PDF</a>
+        <a class="button" href="https://github.com/foerfelixir/bear-buddy-hardware-notes">Open hardware repository</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Target MCU</h2>
+      <p>The remote uses the <strong>WCH CH32V003J4M6</strong> in the 20-pin J package: 2 KB SRAM, 16 KB flash, RV32EC core, up to 48 MHz, and a 3.3 V supply rail. This firmware runs from HSI at 24 MHz divided by 16 to a 1.5 MHz SysTick tick.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap table-wrap">
+      <table>
+        <thead><tr><th>Function</th><th>CH32V003 pin</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>VDD</td><td>Pin 1</td><td>3.3 V rail; 100 nF decoupling near MCU</td></tr>
+          <tr><td>PC1</td><td>Pin 2</td><td>SW3 input, active low</td></tr>
+          <tr><td>PC2</td><td>Pin 3</td><td>SW2 input, active low</td></tr>
+          <tr><td>PC4</td><td>Pin 5</td><td>SW1 input, active low</td></tr>
+          <tr><td>PA2 / TIM1_CH2N</td><td>Pin 12</td><td>IR and indicator output; active low</td></tr>
+          <tr><td>PD1 / SWIO</td><td>Pin 13</td><td>Programming/debug signal</td></tr>
+          <tr><td>PD3 / SWCLK</td><td>Pin 14</td><td>Programming clock input</td></tr>
+          <tr><td>VSS</td><td>Pin 20</td><td>Ground</td></tr>
+          <tr><td>NRST</td><td>Pin 7</td><td>Active-low reset; 10 kΩ pull-up, 100 nF to ground</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>Buttons</h2>
+        <p>Each switch shorts its MCU input to ground when pressed. The firmware enables the internal pull-up and configures EXTI on a falling edge.</p>
+        <p>Priority is SW1 &gt; SW2 &gt; SW3. Releasing the active button sends nothing; release of any non-active button does not interrupt it.</p>
+      </article>
+      <article class="card">
+        <h2>IR output</h2>
+        <p>PA2 drives the base of an NPN transistor through 1 kΩ. The transistor switches the IR LED active-low with a 47 Ω series resistor.</p>
+        <p>TIM1 generates the 38 kHz carrier, so the CPU does not interrupt to produce each carrier cycle.</p>
+      </article>
+      <article class="card">
+        <h2>Power and MCU rail</h2>
+        <p>The original board steps a CR2032 cell to approximately 3.2 V using an RT9193 LDO. The MCU side includes 1 µF bulk and 100 nF decoupling.</p>
+        <p>Use a stable supply. Weak cells and IR LED current peaks cause erratic programming and resets.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Kit context</h2>
+      <p>This IR remote is included in the <strong>Box 10 — Bear-Buddy DIY Desk Companion</strong> kit from Awesome Hardware. TomatoCube published detailed hardware notes and tutorials for the Bear-Buddy family.</p>
+      <p><a href="https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion">Read TomatoCube's Bear-Buddy tutorial</a></p>
+      <p><a href="credits.html">Read the full credit note</a></p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · hardware</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>

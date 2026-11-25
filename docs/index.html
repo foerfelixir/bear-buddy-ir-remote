@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Private documentation for the Bear-Buddy CH32V003 three-button IR remote and its firmware variants.">
+  <title>Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">CH32V003J4M6 · three buttons · 38 kHz</div>
+      <h1>Small remote.<br>Every variant preserved.</h1>
+      <p class="lede">Source, binaries, tests, and hardware notes for the IR remote included with the Bear-Buddy DIY Desk Companion kit.</p>
+      <div class="badges">
+        <span class="badge private">Private · not public</span>
+        <span class="badge working">Samsung build hardware-verified</span>
+        <span class="badge">RV32EC / ILP32E</span>
+        <span class="badge">No runtime dependencies</span>
+      </div>
+      <div class="actions">
+        <a class="button primary" href="variants.html">Compare variants</a>
+        <a class="button" href="build.html">Build and flash</a>
+        <a class="button" href="https://github.com/foerfelixir/bear-buddy-ir-remote">Open private repository</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid three">
+        <article class="card"><div class="meta">Inputs</div><h3>SW1 · SW2 · SW3</h3><p>PC4, PC2, and PC1. Active low with internal pull-ups. Priority is SW1 &gt; SW2 &gt; SW3.</p></article>
+        <article class="card"><div class="meta">Output</div><h3>PA2 / TIM1_CH2N</h3><p>Hardware-generated 38.46 kHz carrier. The CPU only gates marks and spaces.</p></article>
+        <article class="card"><div class="meta">Power</div><h3>Standby between presses</h3><p>EXTI falling-edge wake. Configurable and Samsung builds keep a six-second SWIO window.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Firmware families</div>
+      <h2>Pick the behavior you need</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="meta">984 B · source + binary</div>
+          <h3>NEC 200 ms</h3>
+          <p>Address 0x00. SW1 sends 152, SW2 sends 31, SW3 sends 62. Full NEC frames repeat every 200 ms while held.</p>
+          <p><a href="variants.html#nec">Variant details</a></p>
+        </article>
+        <article class="card">
+          <div class="meta">1360 B · source + binary</div>
+          <h3>Configurable IRC2</h3>
+          <p>NEC or Samsung per button. A checksummed 64-byte flash page stores address, command, and protocol.</p>
+          <p><a href="variants.html#configurable">Variant details</a></p>
+        </article>
+        <article class="card">
+          <div class="meta">1308 B · source + binary</div>
+          <h3>Samsung 110 ms</h3>
+          <p>Power, Enter, and the full 7150 + Enter macro. SW1/SW2 use Samsung short repeats; SW3 always sends the whole macro.</p>
+          <p><a href="variants.html#samsung">Variant details</a></p>
+        </article>
+        <article class="card">
+          <div class="meta">1276 B · binary only</div>
+          <h3>NEC-only backup</h3>
+          <p>Historical IRC2-era image. The exact source was not retained; the original binary and template are preserved.</p>
+          <p><a href="variants.html#backup">Variant details</a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="callout info">
+        <h2>Hardware was traced, not supplied</h2>
+        <p>The schematic was reverse-engineered by physically tracing the PCB lines and continuity. It is not a manufacturer schematic. Verify it against your own board before powering or fabricating anything.</p>
+        <p><a href="hardware.html">Read the hardware notes</a> · <a href="https://github.com/foerfelixir/bear-buddy-hardware-notes">Open the private hardware repository</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Quick start</div>
+      <h2>Build, test, and verify</h2>
+      <pre><code>TOOLCHAIN_DIR=/path/to/xpack-riscv-none-elf-gcc-15.2.0-1/bin \
+  sh scripts/build-all.sh
+node scripts/verify-manifests.mjs</code></pre>
+      <p class="muted">The build regenerates all source-backed images, checks Samsung frame values, validates the IRC2 browser codec, and verifies all ten committed artifacts against SHA-256.</p>
+      <p><a href="build.html">Full build and flashing instructions</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">Kit credit</div>
+      <h2>Built on Awesome Hardware, documented by TomatoCube</h2>
+      <p>Special thanks to <strong>Awesome Hardware</strong> for the Bear-Buddy kit and to <strong>TomatoCube</strong> for the excellent hardware and tutorial. The three-button IR remote is part of the kit.</p>
+      <p><a href="https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion">Box 10 — Bear-Buddy DIY Desk Companion</a></p>
+      <p><a href="credits.html">All credits and references</a></p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner">
+    <span>Bear-Buddy IR Remote · private project archive</span>
+    <span>Static site · no trackers · no external assets</span>
+  </div>
+</footer>
+</body>
+</html>

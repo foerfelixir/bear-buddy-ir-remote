@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Every preserved firmware variant for the Bear-Buddy CH32V003 IR remote.">
+  <title>Firmware variants · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">Firmware archive</div>
+      <h1>Four variants, one board</h1>
+      <p>Three variants retain complete source and tests. The fourth is an exact historical binary snapshot whose source was not retained.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap table-wrap">
+      <table>
+        <thead><tr><th>Variant</th><th>Protocol</th><th>Held behavior</th><th>Code</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>NEC 200 ms</td><td>NEC</td><td>Full frame / 200 ms</td><td>984 B</td><td>Complete</td></tr>
+          <tr><td>Configurable IRC2</td><td>NEC or Samsung</td><td>Full frame / 200 ms</td><td>1360 B</td><td>Complete</td></tr>
+          <tr><td>Samsung 110 ms</td><td>Samsung32</td><td>Short repeat / 110 ms; full macro</td><td>1308 B</td><td>Complete</td></tr>
+          <tr><td>NEC-only backup</td><td>NEC</td><td>Historical snapshot</td><td>1276 B</td><td>Binary only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="nec">
+    <div class="wrap grid">
+      <article class="card">
+        <div class="meta">Source + binary · 984 B</div>
+        <h2>NEC 200 ms</h2>
+        <p>The simplest maintained build. It uses NEC address <code>0x00</code> and sends command <code>152</code>, <code>31</code>, or <code>62</code> from SW1, SW2, or SW3.</p>
+        <ul>
+          <li>Full 9 ms / 4.5 ms NEC header.</li>
+          <li>Full frame repeats every 200 ms while held.</li>
+          <li>SW1 &gt; SW2 &gt; SW3 priority.</li>
+          <li>Three-second awake window after reset; no post-release window.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Files</h3>
+        <p><code>variants/nec-repeat-200ms/src/main.c</code></p>
+        <p><code>build/ir_remote.bin</code> and <code>build/ir_remote.hex</code></p>
+        <p>SHA-256: <code>f4d67cd728ed617ac83db7d72a747ce6f9394f0c1eee1924151c9892a6e7659d</code></p>
+        <p><a href="https://github.com/foerfelixir/bear-buddy-ir-remote/tree/main/variants/nec-repeat-200ms">Open source directory</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="configurable">
+    <div class="wrap grid">
+      <article class="card">
+        <div class="meta">Source + binary · 1360 B</div>
+        <h2>Configurable IRC2</h2>
+        <p>Each button stores an address, command, and protocol selector in a 64-byte page at <code>0x08000800</code>.</p>
+        <ul>
+          <li>Magic <code>IRC2</code> plus checksum over bytes <code>0x00..0x0F</code>.</li>
+          <li>Blank, corrupt, unsupported, or old IRC1 pages use factory NEC commands 152 / 31 / 62.</li>
+          <li>Full configured frame repeats every 200 ms.</li>
+          <li>Six-second SWIO window after reset and release.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Files</h3>
+        <p><code>build/ir_remote.bin</code> · 1360 B</p>
+        <p><code>build/ir_remote_template.bin</code> · 2112 B</p>
+        <p><code>web/ir.js</code> · browser codec, MIT licensed</p>
+        <p>SHA-256: <code>668a315d4d9c389a24133a1ace37118a01c9205a58db924070b1597f650378ec</code></p>
+        <p><a href="protocols.html#config">Configuration layout</a> · <a href="https://github.com/foerfelixir/bear-buddy-ir-remote/tree/main/variants/configurable-irc2">Open source directory</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="samsung">
+    <div class="wrap grid">
+      <article class="card">
+        <div class="meta">Source + binary · 1308 B · hardware verified</div>
+        <h2>Samsung 110 ms</h2>
+        <p>Samsung address <code>0x07</code>. SW1 is Power (<code>0xE0E040BF</code>), SW2 is Enter (<code>0xE0E016E9</code>), and SW3 sends the full <code>7 → 1 → 5 → 0 → Enter</code> macro.</p>
+        <ul>
+          <li>SW1/SW2: one full frame, then the short repeat frame on a fixed 110 ms start-to-start raster.</li>
+          <li>SW3: 500 ms between digits; the complete macro repeats 110 ms after finishing if held.</li>
+          <li>Six-second SWIO window after reset and release.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Files</h3>
+        <p><code>variants/samsung-110ms/src/main.c</code></p>
+        <p><code>build/ir_remote_samsung.bin</code> and <code>.hex</code></p>
+        <p><code>check_codes.mjs</code> verifies all six published 32-bit codes.</p>
+        <p>SHA-256: <code>21eef16bf18e71c84d29251de90cf4bb4ea5bd8dd8bbd29974aa84faaaaef5ad</code></p>
+        <p><a href="https://github.com/foerfelixir/bear-buddy-ir-remote/tree/main/variants/samsung-110ms">Open source directory</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="backup">
+    <div class="wrap grid">
+      <article class="card">
+        <div class="meta">Binary only · 1276 B</div>
+        <h2>NEC-only backup</h2>
+        <p>Preserved byte-for-byte from the IRC2 development period. The exact source tree was not retained, so this image is not reproducible from the other variants.</p>
+        <p>Use it only when the historical image is required. Prefer a source-backed variant for maintenance.</p>
+      </article>
+      <article class="card">
+        <h3>Files</h3>
+        <p><code>ir_remote.bin</code> · 1276 B</p>
+        <p><code>ir_remote.hex</code> · 3605 B</p>
+        <p><code>ir_remote_template.bin</code> · 2112 B</p>
+        <p>SHA-256: <code>0ad62b9cc845c34d7e0a08b3110542b3318fb6ced7dc0a32b4614afab0081e54</code></p>
+        <p><a href="https://github.com/foerfelixir/bear-buddy-ir-remote/tree/main/variants/neconly-backup">Open artifact directory</a></p>
+      </article>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · firmware variants</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NEC, Samsung32, and IRC2 configuration layouts used by the Bear-Buddy IR remote.">
+  <title>Protocols · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">On the wire</div>
+      <h1>NEC, Samsung32, and IRC2</h1>
+      <p>Transmission is active-low on PA2. A mark turns the carrier on; a space turns it off.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>NEC</h2>
+        <p>Standard 16-bit address / 8-bit command format. This project sends an 8-bit address followed by its bitwise complement.</p>
+        <ul>
+          <li>Leader: 9 ms mark, 4.5 ms space.</li>
+          <li>Bit: 560 µs mark, then 560 µs (0) or 1690 µs (1) space.</li>
+          <li>End: 560 µs mark.</li>
+          <li>Address 0x00; commands 152, 31, 62 for SW1, SW2, SW3.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Samsung32</h2>
+        <p>Uses the common extended Samsung header and LSB-first data coding.</p>
+        <ul>
+          <li>Leader: 4500 µs mark, 4500 µs space.</li>
+          <li>Bit: 560 µs mark, then 560 µs (0) or 1690 µs (1) space.</li>
+          <li>End: 560 µs mark.</li>
+          <li>Address byte 0x07 for this variant.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2>Samsung short repeat</h2>
+        <p>SW1 and SW2 send a short repeat frame every 110 ms while held:</p>
+        <ul>
+          <li>4500 µs mark</li>
+          <li>4500 µs space</li>
+          <li>560 µs mark</li>
+          <li>560 µs space</li>
+          <li>560 µs mark</li>
+        </ul>
+        <p class="muted">The start-to-start raster is fixed rather than adding delay after the frame.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Published Samsung codes</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Key</th><th>32-bit transmitted word</th></tr></thead>
+          <tbody>
+            <tr><td>SW1 · Power</td><td><code>0xE0E040BF</code></td></tr>
+            <tr><td>SW2 · Enter</td><td><code>0xE0E016E9</code></td></tr>
+            <tr><td>SW3 · 7</td><td><code>0xE0E030CF</code></td></tr>
+            <tr><td>SW3 · 1</td><td><code>0xE0E020DF</code></td></tr>
+            <tr><td>SW3 · 5</td><td><code>0xE0E0906F</code></td></tr>
+            <tr><td>SW3 · 0</td><td><code>0xE0E08877</code></td></tr>
+            <tr><td>SW3 · Enter</td><td><code>0xE0E016E9</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">The firmware sends SW3 with 500 ms between digits. If SW3 remains held, the complete 7 → 1 → 5 → 0 → Enter macro starts again after 110 ms.</p>
+    </div>
+  </section>
+
+  <section class="section" id="config">
+    <div class="wrap">
+      <div class="eyebrow">Configurable variant</div>
+      <h2>IRC2 page at 0x08000800</h2>
+      <p>The browser patches the 64-byte blank page in <code>ir_remote_template.bin</code>. The same codec is shipped as <code>web/ir.js</code> and tested without hardware.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Offset</th><th>Size</th><th>Field</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>0x00</code></td><td>4</td><td>Magic</td><td>ASCII <code>IRC2</code> / LE <code>0x32435249</code></td></tr>
+            <tr><td><code>0x04</code></td><td>4</td><td>Button 0</td><td>Address, command, protocol, <code>0xFF</code></td></tr>
+            <tr><td><code>0x08</code></td><td>4</td><td>Button 1</td><td>Address, command, protocol, <code>0xFF</code></td></tr>
+            <tr><td><code>0x0C</code></td><td>4</td><td>Button 2</td><td>Address, command, protocol, <code>0xFF</code></td></tr>
+            <tr><td><code>0x10</code></td><td>4</td><td>Checksum</td><td>Unsigned sum of bytes <code>0x00..0x0F</code>, little-endian</td></tr>
+            <tr><td><code>0x14</code></td><td>44</td><td>Reserved</td><td><code>0xFF</code> erased fill</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Protocol <code>0</code> is NEC and <code>1</code> is Samsung. The 16-bit address field stores the 8-bit address plus its complement. Invalid pages fall back to factory NEC commands 152 / 31 / 62.</p>
+      <p><a href="https://github.com/foerfelixir/bear-buddy-ir-remote/blob/main/variants/configurable-irc2/test_config_page.mjs">Open the compatibility test</a></p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · protocols</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>

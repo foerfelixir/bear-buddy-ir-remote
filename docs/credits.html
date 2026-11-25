@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Credits and licensing for the Bear-Buddy IR remote, hardware, firmware, and browser codec.">
+  <title>Credits · Bear-Buddy IR Remote</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">Bear-Buddy <span>IR Remote</span></a>
+    <nav aria-label="Main navigation">
+      <a href="variants.html">Variants</a>
+      <a href="build.html">Build &amp; flash</a>
+      <a href="hardware.html">Hardware</a>
+      <a href="protocols.html">Protocols</a>
+      <a href="troubleshooting.html">Troubleshooting</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow">With thanks</div>
+      <h1>Credits and licensing</h1>
+      <p>This private archive builds on open hardware documentation and an open firmware base. Please preserve the original notices.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article class="card">
+        <h2>Awesome Hardware</h2>
+        <p>Special thanks to <strong>Awesome Hardware</strong> for the Bear-Buddy hardware and the Box 10 kit. The IR remote documented here is part of that kit.</p>
+      </article>
+      <article class="card">
+        <h2>TomatoCube</h2>
+        <p>Thanks to <strong>TomatoCube</strong> for the detailed Bear-Buddy hardware tutorial and documentation.</p>
+        <p><a href="https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion">Box 10 — Bear-Buddy DIY Desk Companion</a></p>
+        <p><a href="https://github.com/TomatoCube18/DIY_Bear-Buddy_ControllerBoard">Bear-Buddy controller-board reference</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Firmware lineage</h2>
+      <p>The NEC remote firmware derives from <a href="https://github.com/wagiminator/CH32V003-IR-Remote">wagiminator's TinyRemote for CH32V003</a>. Its CC BY-SA 3.0 notice and attribution are retained in the repository's <a href="https://github.com/foerfelixir/bear-buddy-ir-remote/blob/main/LICENSE">LICENSE</a> file.</p>
+      <p>The configurable and Samsung adaptations remain derivative firmware under the same CC BY-SA 3.0 terms. The bundled browser config codec in <code>variants/configurable-irc2/web/ir.js</code> is covered by the separate MIT notice in that directory.</p>
+      <div class="callout">
+        <h2>License boundary</h2>
+        <p>The CH32V003 firmware and firmware-derived documentation are CC BY-SA 3.0 unless explicitly stated otherwise. The browser-side IRC2 codec is MIT. The traced schematic and hardware notes are documented separately in the hardware repository.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Hardware evidence</h2>
+      <p>The schematic in this archive was reverse-engineered by physically tracing PCB lines. It is not an Awesome Hardware or TomatoCube drawing. The hardware repository retains the original PDF and SHA-256 checksum.</p>
+      <p><a href="https://github.com/foerfelixir/bear-buddy-hardware-notes/blob/main/docs/reverse-engineering.md">Read the reverse-engineering method</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Related project</h2>
+      <p>The ESP32-C3 bridge, browser programmer, IR configurator, and its separate documentation are maintained in the private <a href="https://github.com/foerfelixir/bear-buddy-webflasher">Bear-Buddy web flasher repository</a>.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-inner"><span>Bear-Buddy IR Remote · credits</span><a href="index.html">Back to overview</a></div>
+</footer>
+</body>
+</html>
