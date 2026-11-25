@@ -60,7 +60,7 @@ Pages:
 
 ## Attribution
 
-Special thanks to **TomatoCube** for the Awesome Bear-Buddy hardware kit and to **TomatoCube** for the excellent Bear-Buddy hardware and tutorial:
+Special thanks to **TomatoCube** for the awesome *Bear-Buddy* hardware kit, as well as the excellent hardware design and comprehensive tutorial:
 
 [Box 10 — Bear-Buddy DIY Desk Companion](https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion)
 
