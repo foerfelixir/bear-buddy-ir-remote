@@ -1,8 +1,8 @@
 # Credits
 
-Special thanks to **Awesome Hardware** for the Bear-Buddy hardware and Box 10 kit. The three-button CH32V003 IR remote documented in this repository is part of that kit.
+Bear-Buddy is an awesome hardware kit designed by **TomatoCube**. The three-button CH32V003 IR remote documented in this repository is part of that kit.
 
-Thanks to **TomatoCube** for the detailed Bear-Buddy hardware tutorial and documentation:
+Thanks to **TomatoCube** for the hardware design and detailed tutorial:
 
 - [Box 10 — Bear-Buddy DIY Desk Companion](https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion)
 - [Bear-Buddy controller-board reference](https://github.com/TomatoCube18/DIY_Bear-Buddy_ControllerBoard)
@@ -15,7 +15,7 @@ Firmware-derived work remains under **Creative Commons Attribution-ShareAlike 3.
 
 ## Hardware evidence
 
-The schematic was reverse-engineered by physically tracing the PCB lines on the actual remote. It is not an Awesome Hardware or TomatoCube schematic. The original PDF and its checksum are preserved in the private [Bear-Buddy hardware-notes repository](https://github.com/foerfelixir/bear-buddy-hardware-notes).
+The schematic was reverse-engineered by physically tracing the PCB lines on the actual remote. It is not an official TomatoCube schematic. The original PDF and its checksum are preserved in the private [Bear-Buddy hardware-notes repository](https://github.com/foerfelixir/bear-buddy-hardware-notes).
 
 ## Related project
 

@@ -1,6 +1,6 @@
 # Bear-Buddy CH32V003 IR Remote
 
-Private source, binaries, and documentation for the three-button IR remote included with the **Bear-Buddy DIY Desk Companion** kit.
+Private source, binaries, and documentation for the three-button IR remote included with the **Box 10 — Bear-Buddy DIY Desk Companion**, an awesome hardware kit designed by **TomatoCube**.
 
 **Status:** private; not approved for public release. The static documentation site is in [`docs/index.html`](docs/index.html).
 
@@ -60,7 +60,7 @@ Pages:
 
 ## Attribution
 
-Special thanks to **Awesome Hardware** for the Bear-Buddy kit and to **TomatoCube** for the excellent Bear-Buddy hardware and tutorial:
+Bear-Buddy is an awesome hardware kit designed by **TomatoCube**. Thanks to TomatoCube for the hardware design and excellent tutorial:
 
 [Box 10 — Bear-Buddy DIY Desk Companion](https://github.com/TomatoCube18/Docs/tree/main/Box%2010%20-%20Bear-Buddy%20DIY%20Desk%20Companion)
 
