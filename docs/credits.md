@@ -15,7 +15,7 @@ Firmware-derived work remains under **Creative Commons Attribution-ShareAlike 3.
 
 ## Hardware evidence
 
-The schematic was reverse-engineered by physically tracing the PCB lines on the actual remote. It is not an official TomatoCube schematic. The original PDF and its checksum are preserved in the private [Bear-Buddy hardware-notes repository](https://github.com/foerfelixir/bear-buddy-hardware-notes).
+The schematic was reverse-engineered by physically tracing the PCB lines on the actual remote. It is not an official TomatoCube schematic. The original PDF and its checksum are preserved in the [Bear-Buddy hardware-notes repository](https://github.com/foerfelixir/bear-buddy-hardware-notes).
 
 ## Related project
 

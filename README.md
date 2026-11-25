@@ -1,8 +1,8 @@
 # Bear-Buddy CH32V003 IR Remote
 
-Private source, binaries, and documentation for the three-button IR remote included with the **Box 10 — Bear-Buddy DIY Desk Companion**, an awesome hardware kit designed by **TomatoCube**.
+Source, binaries, and documentation for the three-button IR remote included with the **Box 10 — Bear-Buddy DIY Desk Companion**, an awesome hardware kit designed by **TomatoCube**.
 
-**Status:** private; not approved for public release. The static documentation site is in [`docs/index.html`](docs/index.html).
+**Status:** public. Read the [documentation site](https://foerfelixir.github.io/bear-buddy-ir-remote/) or open [`docs/index.html`](docs/index.html) locally.
 
 ## Hardware and related repositories
 
@@ -47,7 +47,7 @@ Never flash the 2112-byte configurable template as though it were source code. I
 
 ## Documentation site
 
-Open [`docs/index.html`](docs/index.html) locally, or serve the `docs` directory with any static web server. The site has no build step, external fonts, JavaScript, or third-party trackers. GitHub Pages is not enabled because the current account plan does not support Pages for private repositories; the site remains Pages-ready and no public site was created.
+Open [`docs/index.html`](docs/index.html) locally, or serve the `docs` directory with any static web server. The site has no build step, external fonts, JavaScript, or third-party trackers. The public site is at [foerfelixir.github.io/bear-buddy-ir-remote](https://foerfelixir.github.io/bear-buddy-ir-remote/).
 
 Pages:
 

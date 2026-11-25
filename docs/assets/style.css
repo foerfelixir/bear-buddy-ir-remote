@@ -47,7 +47,7 @@ p { max-width: 78ch; }
 .lede { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); max-width: 760px; }
 .badges { display: flex; flex-wrap: wrap; gap: .55rem; margin: 1.4rem 0; }
 .badge { border: 1px solid var(--line); border-radius: 999px; padding: .28rem .7rem; color: var(--muted); background: rgba(18, 25, 34, .72); font-size: .8rem; }
-.badge.private { color: var(--accent); border-color: rgba(255, 180, 84, .4); }
+.badge.public { color: var(--accent); border-color: rgba(255, 180, 84, .4); }
 .badge.working { color: var(--accent-2); border-color: rgba(99, 216, 198, .35); }
 .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.6rem; }
 .button { display: inline-block; border: 1px solid var(--line); border-radius: .55rem; padding: .65rem .95rem; color: var(--text); background: var(--panel); font-weight: 650; text-decoration: none; }
