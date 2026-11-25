@@ -47,7 +47,7 @@ Never flash the 2112-byte configurable template as though it were source code. I
 
 ## Documentation site
 
-Open [`docs/index.html`](docs/index.html) locally, or serve the `docs` directory with any static web server. The site has no build step, external fonts, JavaScript, or third-party trackers.
+Open [`docs/index.html`](docs/index.html) locally, or serve the `docs` directory with any static web server. The site has no build step, external fonts, JavaScript, or third-party trackers. GitHub Pages is not enabled because the current account plan does not support Pages for private repositories; the site remains Pages-ready and no public site was created.
 
 Pages:
 
